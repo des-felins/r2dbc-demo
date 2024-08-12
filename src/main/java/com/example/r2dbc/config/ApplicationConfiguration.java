@@ -9,8 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.r2dbc.connection.R2dbcTransactionManager;
+import org.springframework.transaction.ReactiveTransactionManager;
+import org.springframework.transaction.reactive.TransactionalOperator;
 
-@Configuration
+@Configuration(proxyBeanMethods = true)
 @EnableR2dbcRepositories
 @EnableR2dbcAuditing
 public class ApplicationConfiguration extends AbstractR2dbcConfiguration {
@@ -42,6 +45,16 @@ public class ApplicationConfiguration extends AbstractR2dbcConfiguration {
                 .password(password)
                 .build()
         );
+    }
+
+    @Bean
+    public ReactiveTransactionManager reactiveTransactionManager() {
+        return new R2dbcTransactionManager(connectionFactory());
+    }
+
+    @Bean
+    public TransactionalOperator transactionalOperator() {
+        return TransactionalOperator.create(reactiveTransactionManager());
     }
 
 }

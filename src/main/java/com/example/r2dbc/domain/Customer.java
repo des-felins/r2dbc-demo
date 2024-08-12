@@ -20,6 +20,10 @@ public class Customer {
     public Customer() {
     }
 
+    public List<Order> getOrders() {
+        return  orders == null ? new ArrayList<>() : orders;
+    }
+
     public Customer(Long id, String name, String email) {
         this.id = id;
         this.name = name;
@@ -48,10 +52,6 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
     }
 
     public void setOrders(List<Order> orders) {
