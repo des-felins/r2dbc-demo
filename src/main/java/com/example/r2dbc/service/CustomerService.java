@@ -52,12 +52,12 @@ public class CustomerService {
 
         return Mono.just(customer)
                 .zipWith(orderRepository.findAllByCustomerId(customer.getId()).collectList())
+                .as(transactionalOperator::transactional)
                 .map(result -> new CustomerDTO(
                         result.getT1().getId(),
                         result.getT1().getName(),
                         result.getT1().getEmail(),
-                        result.getT2()))
-                .as(transactionalOperator::transactional);
+                        result.getT2()));
 
     }
 
